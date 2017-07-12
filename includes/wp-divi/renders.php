@@ -187,6 +187,7 @@ function wp_divi_separete_categories($include_categories, $args){
 function wp_divi_get_congresscards( $args, $fullwidth, $hover_icon, $show_title, $show_categories){
 ob_start();
 $emails = "";
+$count = 0;
 query_posts( $args );
 if ( have_posts() ) {
 while ( have_posts() ) {
@@ -199,7 +200,10 @@ if (!empty($emails))
 {
 	$emails .= ',';
 }
+if (count < 100)
+{
 $emails .= $email;
+}
 if ($voto > 0)
 	$votaux = 'positive';
 else if ($voto < 0)
