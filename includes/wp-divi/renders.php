@@ -203,6 +203,7 @@ if (!empty($emails))
 if (count < 100)
 {
 $emails .= $email;
+count += 1;
 }
 if ($voto > 0)
 	$votaux = 'positive';
