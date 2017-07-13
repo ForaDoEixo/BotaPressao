@@ -1011,7 +1011,7 @@ class ET_Builder_Module_Make_Pressure_Button extends ET_Builder_Module {
 
 			shuffle($emails);
 			$emails = array_slice($emails, 0, 98);
-			
+
 			$button_url .= implode( ',',  $emails ) . '?subject=' . get_option('makepressure_email_title') . '&body=' . get_option('makepressure_email_body') ;
 			/* Restore original Post Data */
 			wp_reset_postdata();
@@ -1296,17 +1296,18 @@ class ET_Builder_Module_Make_Pressure_Gmail_Button extends ET_Builder_Module {
 		$the_query = new WP_Query( $args );
 
 		// The Loop
-		$aux = '';
-		$aux2 ='';
+		$emails = array();
 		$button_url = "https://mail.google.com/mail?view=cm&tf=0&to=" . get_option('makepressure_more_emailsmails');
 		if ( $the_query->have_posts() ) {
 			while ( $the_query->have_posts() ) {
 				$the_query->the_post();
-				$aux = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):'';
-				if ($aux) $aux2 .= $aux2 ? "," . $aux: $aux;
+				$emails[] = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):'';
 			}
 
-			$button_url .= $aux2 . '&su=' . get_option('makepressure_email_title') . '&body=' . get_option('makepressure_email_body') ;
+			shuffle($emails);
+			$emails = array_slice($emails, 0, 98);
+
+			$button_url .= implode( ',', $emails ) . '&su=' . get_option('makepressure_email_title') . '&body=' . get_option('makepressure_email_body') ;
 			/* Restore original Post Data */
 			wp_reset_postdata();
 		} else {
@@ -2808,17 +2809,19 @@ class ET_Builder_Module_Make_Pressure_ClipBoard extends ET_Builder_Module {
 
     query_posts( $args );
 
-    $emails = '';
-    $aux = '';
+    $emails = array();
     $output = '';
     if ( have_posts() ) {
       $output .= '<textarea class="makepressure_clipboard">';
       while ( have_posts() ) {
           the_post();
-          $emails = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):'';
-          if ($emails) $aux .= $aux ? "," . $emails: $emails;
+          $emails[] = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):'';
         }
-        $output .= $aux;
+
+	    shuffle($emails);
+	    $emails = array_slice($emails, 0, 98);
+
+        $output .= implode( ',', $emails );
       $output .= '</textarea>';
       wp_reset_query();
     } else {
