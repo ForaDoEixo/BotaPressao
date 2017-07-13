@@ -37,7 +37,7 @@ class MakePressure_Widget extends WP_Widget {
       'post_status' => 'publish'
     );
     $the_query = new WP_Query( $args );
-    $emails = "";
+    $emails = array();
     $aux = "";
 
     // The Loop
@@ -45,15 +45,14 @@ class MakePressure_Widget extends WP_Widget {
 
       while ( $the_query->have_posts() ) {
         $the_query->the_post();
-        $emails = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):"";
-        if ($emails) $aux .= $aux ? "," . $emails: $emails;
+        $emails[] = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):"";
       }
       wp_reset_postdata();
       /* Restore original Post Data */
     } else {
       // no posts found
     }
-    $button_url .= $aux . "?subject=" . get_option('makepressure_email_title') . "&body=" . get_option('makepressure_email_body');
+    $button_url .= implode( ',', array_rand ( $emails, 100 ) ) . "?subject=" . get_option('makepressure_email_title') . "&body=" . get_option('makepressure_email_body');
     // Nothing to output if neither Button Text nor Button URL defined
     if ( '' === $button_text && '' === $button_url ) {
       return;
