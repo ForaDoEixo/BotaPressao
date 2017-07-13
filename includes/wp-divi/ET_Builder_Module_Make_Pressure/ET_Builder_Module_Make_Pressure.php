@@ -1002,7 +1002,6 @@ class ET_Builder_Module_Make_Pressure_Button extends ET_Builder_Module {
 
 		// The Loop
 		$emails = array();
-		$aux ='';
 		$button_url = 'mailto:' . get_option('makepressure_more_emailsmails');
 		if ( $the_query->have_posts() ) {
 			while ( $the_query->have_posts() ) {
@@ -1010,7 +1009,10 @@ class ET_Builder_Module_Make_Pressure_Button extends ET_Builder_Module {
 				$emails[] = get_post_meta(  get_the_ID(), 'public_agent_email', true) ? get_post_meta(  get_the_ID(), 'public_agent_email', true):'';
 			}
 
-			$button_url .= implode( ',', array_rand ( $emails, 100 ) ) . '?subject=' . get_option('makepressure_email_title') . '&body=' . get_option('makepressure_email_body') ;
+			shuffle($emails);
+			$emails = array_slice($emails, 0, 98);
+			
+			$button_url .= implode( ',',  $emails ) . '?subject=' . get_option('makepressure_email_title') . '&body=' . get_option('makepressure_email_body') ;
 			/* Restore original Post Data */
 			wp_reset_postdata();
 		} else {

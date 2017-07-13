@@ -186,7 +186,7 @@ function wp_divi_separete_categories($include_categories, $args){
 
 function wp_divi_get_congresscards( $args, $fullwidth, $hover_icon, $show_title, $show_categories){
 ob_start();
-$emails = "";
+$emails = array();
 query_posts( $args );
 if ( have_posts() ) {
 while ( have_posts() ) {
@@ -194,7 +194,6 @@ the_post();
 
 $voto = get_post_meta(get_the_ID(),mk_get_option("result"),true);
 $email = get_post_meta(get_the_ID(), 'public_agent_email', true);
-$emails = array();
 
 $emails[] = $email;
 if ($voto > 0)
@@ -302,12 +301,16 @@ $party = wp_get_post_terms( get_the_ID() , 'public_agent_party');
 			get_template_part( 'includes/no-results', 'index' );
 		}
 	}
+
+	shuffle($emails);
+	$emails = array_slice($emails, 0, 98);
+
 	$posts = ob_get_contents();
 	ob_end_clean();
 	ob_start();
 	?>
 
-	<input id="makepressure_hidden_emails" type="hidden" value="<?php echo implode( ',', array_rand ( $emails, 100 ) ); ?>">
+	<input id="makepressure_hidden_emails" type="hidden" value="<?php echo implode( ',', $emails ); ?>">
 	<script>
 	var emails = document.getElementById('makepressure_hidden_emails');
 	var result_button = document.getElementsByClassName('et_makepressure_result_button');

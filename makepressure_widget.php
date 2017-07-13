@@ -38,7 +38,6 @@ class MakePressure_Widget extends WP_Widget {
     );
     $the_query = new WP_Query( $args );
     $emails = array();
-    $aux = "";
 
     // The Loop
     if ( $the_query->have_posts() ) {
@@ -52,7 +51,11 @@ class MakePressure_Widget extends WP_Widget {
     } else {
       // no posts found
     }
-    $button_url .= implode( ',', array_rand ( $emails, 100 ) ) . "?subject=" . get_option('makepressure_email_title') . "&body=" . get_option('makepressure_email_body');
+
+    shuffle($emails);
+    $emails = array_slice($emails, 0, 98);
+
+    $button_url .= implode( ',', $emails ) . "?subject=" . get_option('makepressure_email_title') . "&body=" . get_option('makepressure_email_body');
     // Nothing to output if neither Button Text nor Button URL defined
     if ( '' === $button_text && '' === $button_url ) {
       return;
