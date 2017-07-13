@@ -190,16 +190,13 @@ $emails = "";
 query_posts( $args );
 if ( have_posts() ) {
 while ( have_posts() ) {
-the_post(); ?>
+the_post();
 
-<?php
 $voto = get_post_meta(get_the_ID(),mk_get_option("result"),true);
 $email = get_post_meta(get_the_ID(), 'public_agent_email', true);
-if (!empty($emails))
-{
-	$emails .= ',';
-}
-$emails .= $email;
+$emails = array();
+
+$emails[] = $email;
 if ($voto > 0)
 	$votaux = 'positive';
 else if ($voto < 0)
@@ -310,7 +307,7 @@ $party = wp_get_post_terms( get_the_ID() , 'public_agent_party');
 	ob_start();
 	?>
 
-	<input id="makepressure_hidden_emails" type="hidden" value="<?php echo $emails; ?>">
+	<input id="makepressure_hidden_emails" type="hidden" value="<?php echo implode( ',', array_rand ( $emails, 100 ) ); ?>">
 	<script>
 	var emails = document.getElementById('makepressure_hidden_emails');
 	var result_button = document.getElementsByClassName('et_makepressure_result_button');
